@@ -9,7 +9,9 @@ namespace Zerolingo
     {
         static async Task Main(string[] args)
         {
+            Console.WriteLine($"Downloading {BrowserFetcher.DefaultRevision}");
             await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+
             var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = false
