@@ -49,7 +49,9 @@ namespace Zerolingo
 
             var pages = await browser.PagesAsync();
             Page googlePopup = pages[pages.Length - 1];
-            await googlePopup.WaitForSelectorAsync("input.whsOnd.zHQkBf");
+            // await googlePopup.WaitForSelectorAsync("input.whsOnd.zHQkBf");
+            // await browser.TargetCreated  --- Need to read up on Handling Events to implement this.
+
 
             Console.WriteLine("Your account was created with Google, so please enter your Google credentials:");
             string[] googleCredentials = passwordManager.CollectCredentials("Google");
