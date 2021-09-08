@@ -17,11 +17,14 @@ namespace Zerolingo
             fetcher.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DisplayDownloadProgress);
         }
         static void DisplayDownloadProgress(object sender,DownloadProgressChangedEventArgs e) {
-            Console.WriteLine("{0}    downloaded {1} of {2} bytes. {3} % complete...",
-            (string)e.UserState,
-            e.BytesReceived,
-            e.TotalBytesToReceive,
-            e.ProgressPercentage);
+            Console.WriteLine(e);
+            
+            
+            // Console.WriteLine("{0}    downloaded {1} of {2} bytes. {3} % complete...",
+            // (string)e.UserState,
+            // e.BytesReceived,
+            // e.TotalBytesToReceive,
+            // e.ProgressPercentage);
         }
     }
 }
