@@ -9,12 +9,12 @@ namespace Zerolingo
     static class DownloadController 
     {
         public static async Task DownloadDefaultAsync() {
-            Console.WriteLine($"Downloading Chromium/{BrowserFetcher.DefaultRevision}:");
+            Console.WriteLine($"Downloading Chromium/{BrowserFetcher.DefaultChromiumRevision}:");
             BrowserFetcher fetcher = new BrowserFetcher();
 
             fetcher.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DisplayDownloadProgress);
 
-            await fetcher.DownloadAsync(BrowserFetcher.DefaultRevision);
+            await fetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
         }
         static void DisplayDownloadProgress(object sender, DownloadProgressChangedEventArgs e) {
             // Console.WriteLine(e);
