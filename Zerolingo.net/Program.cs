@@ -78,7 +78,7 @@ namespace Zerolingo
         }
         static async Task StartStories()
         {
-
+            // Navigate to stories page and begin story grinding
         }
     }
 }
