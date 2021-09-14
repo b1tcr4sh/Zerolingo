@@ -28,7 +28,8 @@ namespace Zerolingo
         static async Task login(Page page, Browser browser)
         {
             PasswordManager passwordManager = new PasswordManager();
-
+            browser.DefaultWaitForTimeout = 60000;
+            page.DefaultTimeout = 100000;
 
             await page.WaitForSelectorAsync("[data-test=have-account]");
             await page.ClickAsync("div._3uMJF");
@@ -68,13 +69,14 @@ namespace Zerolingo
             await googlePopup.TypeAsync("[type=\"email\"]", googleCredentials[0]);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
 
-            // Handle incorrect email/password
+            // TODO: Handle incorrect email/password
 
-            await googlePopup.WaitForSelectorAsync("[type=\"password\"]");
+            Thread.Sleep(3500);
+            await googlePopup.WaitForSelectorAsync("div.Xb9hP");
             await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials[1]);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
 
-            StartStories();
+            // StartStories();
         }
         static async Task StartStories()
         {
