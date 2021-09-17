@@ -8,36 +8,43 @@ namespace Zerolingo
 {
     class Program
     {
+        public static Browser browser;
+
         static async Task Main(string[] args)
         {
             await DownloadController.DownloadDefaultAsync();
 
-            var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
-                Timeout = 10000000,
+                Timeout = 0,
                 Headless = false
             });
 
-            Console.WriteLine($"Downloaded Chromium version {await browser.GetVersionAsync()}");
+            Console.WriteLine($"Downloaded version {await browser.GetVersionAsync()}");
 
             var page = await browser.NewPageAsync();
-            await page.GoToAsync("https://duolingo.com");
+            page.DefaultTimeout = 100000;
+
+            Console.WriteLine("Navigating To https://duolingo.com...  Depending on your connection, this may take a while");
+            await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
+
+            page.Close += new EventHandler(StartStories);
 
             await login(page, browser);
         }
         static async Task login(Page page, Browser browser)
         {
-            PasswordManager passwordManager = new PasswordManager();
-            browser.DefaultWaitForTimeout = 60000;
-            page.DefaultTimeout = 100000;
+            LoginManager passwordManager = new LoginManager();
+            page.Popup += new EventHandler<PopupEventArgs>(passwordManager.LoginWithGoogle); 
+
 
             await page.WaitForSelectorAsync("[data-test=have-account]");
             await page.ClickAsync("div._3uMJF");
 
-            Console.WriteLine("Logging in... Please enter your Duolingo login credentials:");
+            Console.WriteLine("Loading Complete!  Please enter your Duolingo login credentials:");
             string[] credentials = passwordManager.CollectCredentials("Duolingo");
 
-            Console.WriteLine("Loading webpage...");
+            Console.WriteLine("Logging In...");
             await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
 
             
@@ -50,37 +57,19 @@ namespace Zerolingo
             await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
             await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
 
-            page.Popup += new EventHandler<PopupEventArgs>(LoginWithGoogle); // Needs to be awaited somehow to prevent program exiting prematurely
 
-            Thread.Sleep(30000);
-            
+            await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv");
+            await page.CloseAsync();
         }
-        static async void LoginWithGoogle(object sender, PopupEventArgs e)
-        {
-            Console.WriteLine("Popup appeared");
-            PasswordManager passwordManager = new PasswordManager();
-
-            Page googlePopup = e.PopupPage;
-            await googlePopup.WaitForSelectorAsync("input.whsOnd.zHQkBf");
-
-            Console.WriteLine("Your account was created with Google, so please enter your Google credentials:");
-            string[] googleCredentials = passwordManager.CollectCredentials("Google");
-
-            await googlePopup.TypeAsync("[type=\"email\"]", googleCredentials[0]);
-            await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
-
-            // TODO: Handle incorrect email/password
-
-            Thread.Sleep(3500);
-            await googlePopup.WaitForSelectorAsync("div.Xb9hP");
-            await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials[1]);
-            await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
-
-            // StartStories();
-        }
-        static async Task StartStories()
+        
+        static async void StartStories(Object sender ,EventArgs e)
         {
             // Navigate to stories page and begin story grinding
+            Page storiesPage = await browser.NewPageAsync();
+            
+
+
+            await storiesPage.GoToAsync("https://duolingo.com/stories");
         }
     }
 }
