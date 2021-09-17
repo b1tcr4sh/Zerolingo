@@ -19,9 +19,9 @@ namespace Zerolingo
         static void DisplayDownloadProgress(object sender, DownloadProgressChangedEventArgs e) {
             // Console.WriteLine(e);
 
-            Console.Write("\rDownloaded {0} of {1} bytes. {2} % complete...",
-            e.BytesReceived,
-            e.TotalBytesToReceive,
+            Console.Write("\rDownloaded {0}MB(s) of {1}MBs . {2} % complete...",
+            e.BytesReceived * 1000,
+            e.TotalBytesToReceive * 1000,
             e.ProgressPercentage);
         }
     }

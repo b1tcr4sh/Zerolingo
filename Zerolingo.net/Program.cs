@@ -16,8 +16,10 @@ namespace Zerolingo
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
-                Timeout = 0,
-                Headless = false
+#if DEBUG
+                Headless = false,
+#endif
+                Timeout = 0
             });
 
             Console.WriteLine($"Downloaded version {await browser.GetVersionAsync()}");
@@ -42,20 +44,14 @@ namespace Zerolingo
             await page.ClickAsync("div._3uMJF");
 
             Console.WriteLine("Loading Complete!  Please enter your Duolingo login credentials:");
-            string[] credentials = passwordManager.CollectCredentials("Duolingo");
+            await passwordManager.LoginToDuolingo(page);
 
-            Console.WriteLine("Logging In...");
-            await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
+            // Check for "Continue with Google" button
+            if (page.QuerySelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
+                // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
 
-            
-            await page.TypeAsync("[data-test=\"email-input\"]", credentials[0]);
-            await page.TypeAsync("[data-test=\"password-input\"]", credentials[1]);
-
-            await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
-
-            // "Continue with Google" button
-            await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
-            await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
+                await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
+            }
 
 
             await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv");

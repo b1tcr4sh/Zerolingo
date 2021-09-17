@@ -24,6 +24,32 @@ namespace Zerolingo
 
             return credentials;
         }
+        public async Task LoginToDuolingo(Page page) {
+            string[] credentials = CollectCredentials("Duolingo");
+
+            Console.WriteLine("Logging In...");
+            await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
+
+
+            await page.TypeAsync("[data-test=\"email-input\"]", credentials[0]);
+            await page.TypeAsync("[data-test=\"password-input\"]", credentials[1]);
+
+            await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
+
+            if (await page.QuerySelectorAsync("[data-test=\"invalid-form-field\"]") != null) {
+                Console.WriteLine("Successfully Logged in!");
+            } else {
+                Console.WriteLine("Incorrect Username or Password Entered");
+
+                await page.ReloadAsync();
+
+                await page.WaitForSelectorAsync("[data-test=have-account]");
+                await page.ClickAsync("div._3uMJF");
+                await LoginToDuolingo(page);
+            }
+
+
+        }
         public async void LoginWithGoogle(object sender, PopupEventArgs e)
         {
             Console.WriteLine("\"Continue With Google\" Popup appeared");
