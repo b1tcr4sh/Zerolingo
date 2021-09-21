@@ -30,7 +30,7 @@ namespace Zerolingo
             Console.WriteLine("Navigating To https://duolingo.com...  Depending on your connection, this may take a while");
             await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
 
-            page.Close += new EventHandler(StartStories);
+            // page.Close += new EventHandler(StartStories);
 
             await login(page, browser);
         }
@@ -47,18 +47,20 @@ namespace Zerolingo
             await passwordManager.LoginToDuolingo(page);
 
             // Check for "Continue with Google" button
-            if (page.QuerySelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
+            if (page.QuerySelectorAsync("_3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
                 // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
 
+                await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
                 await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
             }
 
 
             await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv");
-            await page.CloseAsync();
+            // await page.CloseAsync();
+            await StartStories();
         }
         
-        static async void StartStories(Object sender ,EventArgs e)
+        static async Task StartStories(/*Object sender ,EventArgs e*/)
         {
             // Navigate to stories page and begin story grinding
             Page storiesPage = await browser.NewPageAsync();
