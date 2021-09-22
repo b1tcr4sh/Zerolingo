@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using PuppeteerSharp;
+using Zerolingo;
 
 namespace Zerolingo
 {
@@ -23,6 +24,33 @@ namespace Zerolingo
 
 
             return credentials;
+        }
+        public async Task LoginToDuolingo(Page page) {
+            string[] credentials = CollectCredentials("Duolingo");
+
+            Console.WriteLine("Attempting to Log In...");
+            await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
+
+
+            await page.TypeAsync("[data-test=\"email-input\"]", credentials[0]);
+            await page.TypeAsync("[data-test=\"password-input\"]", credentials[1]);
+
+            await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
+            
+            if (await page.WaitForSelectorAsync("div._1G8OV._14ezr") != null) {
+                Console.WriteLine("Incorrect Username or Password Entered. Please try again once the page reloads...");
+                
+                await page.ReloadAsync(new NavigationOptions {Timeout = 0});
+                // await Program.login(page);
+            
+                await page.WaitForSelectorAsync("[data-test=have-account]");
+                await page.ClickAsync("div._3uMJF");
+                await LoginToDuolingo(page);
+            } else {
+                Console.WriteLine("Successfully Logged in!");
+            } 
+
+
         }
         public async void LoginWithGoogle(object sender, PopupEventArgs e)
         {
