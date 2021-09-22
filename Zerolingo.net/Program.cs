@@ -27,14 +27,14 @@ namespace Zerolingo
             var page = await browser.NewPageAsync();
             page.DefaultTimeout = 100000;
 
-            Console.WriteLine("Navigating To https://duolingo.com...  Depending on your connection, this may take a while");
+            Console.WriteLine("Navigating To https://duolingo.com...  Depending on your connection, this may take a moment");
             await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
 
             // page.Close += new EventHandler(StartStories);
 
-            await login(page, browser);
+            await login(page);
         }
-        static async Task login(Page page, Browser browser)
+        public static async Task login(Page page)
         {
             LoginManager passwordManager = new LoginManager();
             page.Popup += new EventHandler<PopupEventArgs>(passwordManager.LoginWithGoogle); 
@@ -60,14 +60,13 @@ namespace Zerolingo
             await StartStories();
         }
         
-        static async Task StartStories(/*Object sender ,EventArgs e*/)
+        static async Task StartStories()
         {
             // Navigate to stories page and begin story grinding
             Page storiesPage = await browser.NewPageAsync();
-            
-
-
+        
             await storiesPage.GoToAsync("https://duolingo.com/stories");
+            Console.WriteLine("Arrived at https://duolingo.com/stories");
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using PuppeteerSharp;
+using Zerolingo;
 
 namespace Zerolingo
 {
@@ -27,7 +28,7 @@ namespace Zerolingo
         public async Task LoginToDuolingo(Page page) {
             string[] credentials = CollectCredentials("Duolingo");
 
-            Console.WriteLine("Logging In...");
+            Console.WriteLine("Attempting to Log In...");
             await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
 
 
@@ -35,20 +36,19 @@ namespace Zerolingo
             await page.TypeAsync("[data-test=\"password-input\"]", credentials[1]);
 
             await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
-
-            ElementHandle errorMessage = await page.WaitForSelectorAsync("div._1G8OV._14ezr");
-
-            if (errorMessage != null) {
-                Console.WriteLine("Incorrect Username or Password Entered");
-
-                await page.ReloadAsync();
-
+            
+            if (await page.WaitForSelectorAsync("div._1G8OV._14ezr") != null) {
+                Console.WriteLine("Incorrect Username or Password Entered. Please try again once the page reloads...");
+                
+                await page.ReloadAsync(new NavigationOptions {Timeout = 0});
+                // await Program.login(page);
+            
                 await page.WaitForSelectorAsync("[data-test=have-account]");
                 await page.ClickAsync("div._3uMJF");
                 await LoginToDuolingo(page);
             } else {
                 Console.WriteLine("Successfully Logged in!");
-            }
+            } 
 
 
         }
