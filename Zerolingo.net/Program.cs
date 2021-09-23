@@ -47,7 +47,7 @@ namespace Zerolingo
             await passwordManager.LoginToDuolingo(page);
 
             // Check for "Continue with Google" button
-            if (page.QuerySelectorAsync("_3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
+            if (await page.QuerySelectorAsync("_3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
                 // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
 
                 await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");

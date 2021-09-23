@@ -11,29 +11,28 @@ namespace Zerolingo
 {
     class LoginManager
     {
-        public string[] CollectCredentials(string service)
+        public LoginCredentials CollectCredentials(string service)
         {
-            string[] credentials = new string[2];
-
+            LoginCredentials credentials = new LoginCredentials();  
 
             Console.Write($"{service} Username > ");
-            credentials[0] = Console.ReadLine();
+            credentials.Username = Console.ReadLine();
 
             Console.Write($"{service} Password > ");
-            credentials[1] = Console.ReadLine();
+            credentials.Password = Console.ReadLine();
 
 
             return credentials;
         }
         public async Task LoginToDuolingo(Page page) {
-            string[] credentials = CollectCredentials("Duolingo");
+            LoginCredentials credentials = CollectCredentials("Duolingo");
 
             Console.WriteLine("Attempting to Log In...");
             await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
 
 
-            await page.TypeAsync("[data-test=\"email-input\"]", credentials[0]);
-            await page.TypeAsync("[data-test=\"password-input\"]", credentials[1]);
+            await page.TypeAsync("[data-test=\"email-input\"]", credentials.Username);
+            await page.TypeAsync("[data-test=\"password-input\"]", credentials.Password);
 
             await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
             
@@ -61,16 +60,16 @@ namespace Zerolingo
             await googlePopup.WaitForSelectorAsync("input.whsOnd.zHQkBf");
 
             Console.WriteLine("Your account was created with Google, so please enter your Google credentials:");
-            string[] googleCredentials = passwordManager.CollectCredentials("Google");
+            LoginCredentials googleCredentials = passwordManager.CollectCredentials("Google");
 
-            await googlePopup.TypeAsync("[type=\"email\"]", googleCredentials[0]);
+            await googlePopup.TypeAsync("[type=\"email\"]", googleCredentials.Username);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
 
             // TODO: Handle incorrect email/password
 
             Thread.Sleep(3000);
             await googlePopup.WaitForSelectorAsync("div.Xb9hP");
-            await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials[1]);
+            await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials.Password);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
 
         }
