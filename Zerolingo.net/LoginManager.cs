@@ -35,7 +35,7 @@ namespace Zerolingo
             await page.TypeAsync("[data-test=\"password-input\"]", credentials.Password);
 
             await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
-            
+            /*
             if (await page.WaitForSelectorAsync("div._1G8OV._14ezr") != null) {
                 Console.WriteLine("Incorrect Username or Password Entered. Please try again once the page reloads...");
                 
@@ -47,8 +47,7 @@ namespace Zerolingo
                 await LoginToDuolingo(page);
             } else {
                 Console.WriteLine("Successfully Logged in!");
-            } 
-
+            } */
 
         }
         public async void LoginWithGoogle(object sender, PopupEventArgs e)

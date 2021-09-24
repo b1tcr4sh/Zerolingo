@@ -47,16 +47,16 @@ namespace Zerolingo
             await passwordManager.LoginToDuolingo(page);
 
             // Check for "Continue with Google" button
-            if (await page.QuerySelectorAsync("_3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
-                // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
+            // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
 
-                await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
+
+            if (await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
+                
                 await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
             }
 
 
             await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv");
-            // await page.CloseAsync();
             await StartStories();
         }
         
@@ -65,8 +65,11 @@ namespace Zerolingo
             // Navigate to stories page and begin story grinding
             Page storiesPage = await browser.NewPageAsync();
         
-            await storiesPage.GoToAsync("https://duolingo.com/stories");
+            await storiesPage.GoToAsync("https://duolingo.com/stories", new NavigationOptions {Timeout = 0});
             Console.WriteLine("Arrived at https://duolingo.com/stories");
+
+            await storiesPage.WaitForSelectorAsync("div._2eeKH");
+            await storiesPage.ClickAsync("div._2eeKH");
         }
     }
 }
