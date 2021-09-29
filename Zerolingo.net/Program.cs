@@ -66,7 +66,7 @@ namespace Zerolingo
         
             await storiesPage.GoToAsync("https://www.duolingo.com/stories/es-en-buenos-dias?mode=read", new NavigationOptions {Timeout = 0});
 
-            ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX");   
+            ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX", new WaitForSelectorOptions {Timeout = 0});   
             Console.WriteLine("Beginning grinding on \"{0}\"", title.GetPropertyAsync("innterText"));
 
             ElementHandle startButton = await storiesPage.WaitForSelectorAsync("[data-test=\"story-start\"]");
