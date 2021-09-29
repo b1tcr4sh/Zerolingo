@@ -56,7 +56,6 @@ namespace Zerolingo
             }
 
 
-            await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv");
             await StartStories();
         }
         
@@ -65,11 +64,21 @@ namespace Zerolingo
             // Navigate to stories page and begin story grinding
             Page storiesPage = await browser.NewPageAsync();
         
-            await storiesPage.GoToAsync("https://duolingo.com/stories", new NavigationOptions {Timeout = 0});
-            Console.WriteLine("Arrived at https://duolingo.com/stories");
+            await storiesPage.GoToAsync("https://www.duolingo.com/stories/es-en-buenos-dias?mode=read", new NavigationOptions {Timeout = 0});
 
-            await storiesPage.WaitForSelectorAsync("div._2eeKH");
-            await storiesPage.ClickAsync("div._2eeKH");
+            ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX");   
+            Console.WriteLine("Beginning grinding on \"{0}\"", title.GetPropertyAsync("innterText"));
+
+            ElementHandle startButton = await storiesPage.WaitForSelectorAsync("[data-test=\"story-start\"]");
+            await startButton.ClickAsync();
+
+
+            // Story has been entered/started
+            ElementHandle continueButton = await storiesPage.WaitForSelectorAsync("[data-test=\"stories-player-continue\"]");
+
+            while (storiesPage.QuerySelectorAsync("[data-test=\"stories-player-continue\"]") != null) {
+                await continueButton.ClickAsync();
+            } 
         }
     }
 }
