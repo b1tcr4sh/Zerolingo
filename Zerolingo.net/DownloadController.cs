@@ -20,8 +20,8 @@ namespace Zerolingo
             // Console.WriteLine(e);
 
             Console.Write("\rDownloaded {0}MB(s) of {1}MBs . {2} % complete...",
-            e.BytesReceived / 1000,
-            e.TotalBytesToReceive / 1000,
+            e.BytesReceived / 1000000,
+            e.TotalBytesToReceive / 1000000,
             e.ProgressPercentage);
         }
     }
