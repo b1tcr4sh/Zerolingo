@@ -35,7 +35,7 @@ namespace Zerolingo
             await page.TypeAsync("[data-test=\"password-input\"]", credentials.Password);
 
             await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
-            /*
+            /*  Attempt at checking for incorrect passwords
             if (await page.WaitForSelectorAsync("div._1G8OV._14ezr") != null) {
                 Console.WriteLine("Incorrect Username or Password Entered. Please try again once the page reloads...");
                 
@@ -66,7 +66,7 @@ namespace Zerolingo
 
             // TODO: Handle incorrect email/password
 
-            Thread.Sleep(4000);
+            Thread.Sleep(2000);
             await googlePopup.WaitForSelectorAsync("div.Xb9hP");
             await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials.Password);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
