@@ -89,6 +89,14 @@ namespace Zerolingo
                     foreach (ElementHandle element in choices) {
                         await element.ClickAsync();
                     } 
+                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-token\"]") != null) {
+                    ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("");
+
+                while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null) {
+                        foreach (ElementHandle element in tokens) {
+                            await element.ClickAsync();
+                        }
+                    }
                 }
             } 
         }

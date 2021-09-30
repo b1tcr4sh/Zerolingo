@@ -66,8 +66,8 @@ namespace Zerolingo
 
             // TODO: Handle incorrect email/password
 
-            Thread.Sleep(2000);
-            await googlePopup.WaitForSelectorAsync("div.Xb9hP");
+            Thread.Sleep(4000);
+            await googlePopup.WaitForSelectorAsync("[type=\"password\"]");
             await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials.Password);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
 
