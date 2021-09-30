@@ -77,13 +77,18 @@ namespace Zerolingo
             while (storiesPage.QuerySelectorAsync("[data-test=\"stories-player-continue\"]") != null) {
                 await continueButton.ClickAsync();
 
-                if (await storiesPage.QuerySelectorAsync("[data-test=\"challenge-tap-token\"]") != null) {
-                    Console.WriteLine("Encountered Practice Tokens");
-                    string[] keysToBePressed = {"1", "2", "3", "4"};
-                    
-                    foreach (string element in keysToBePressed) {
-                        await storiesPage.Keyboard.PressAsync(element);
-                    }
+                if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-choice\"]") != null) {
+                    ElementHandle[] choices = await storiesPage.QuerySelectorAllAsync("[data-test=\"stories-choice\"]");
+
+                    foreach (ElementHandle element in choices) {
+                        await element.ClickAsync();
+                    } 
+                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"challenge-tap-token\"]") != null) {
+                    ElementHandle[] choices = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
+
+                    foreach (ElementHandle element in choices) {
+                        await element.ClickAsync();
+                    } 
                 }
             } 
         }
