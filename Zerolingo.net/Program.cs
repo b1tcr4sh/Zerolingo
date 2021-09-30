@@ -47,16 +47,15 @@ namespace Zerolingo
             await passwordManager.LoginToDuolingo(page);
 
             // Check for "Continue with Google" button
-            // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
-
-
             if (await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
                 
                 await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
+                await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv._2d3xe"); // "Learn" link: To wait for login to complete before attempting to navigate to story.
+
+                await StartStories();
+            } else {
+                await StartStories();
             }
-
-
-            await StartStories();
         }
         
         static async Task StartStories()
@@ -67,7 +66,7 @@ namespace Zerolingo
             await storiesPage.GoToAsync("https://www.duolingo.com/stories/es-en-buenos-dias?mode=read", new NavigationOptions {Timeout = 0});
 
             ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX", new WaitForSelectorOptions {Timeout = 0});   
-            Console.WriteLine("Beginning grinding on \"{0}\"", title.GetPropertyAsync("innterText"));
+            Console.WriteLine("Beginning grinding on \"{0}\"", await title.GetPropertyAsync("innterText"));
 
             ElementHandle startButton = await storiesPage.WaitForSelectorAsync("[data-test=\"story-start\"]");
             await startButton.ClickAsync();
