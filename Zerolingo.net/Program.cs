@@ -2,6 +2,7 @@
 using PuppeteerSharp;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Linq;
 using Zerolingo;
 
 namespace Zerolingo
@@ -90,10 +91,18 @@ namespace Zerolingo
                         await element.ClickAsync();
                     } 
                 } else if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-token\"]") != null) {
-                    ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("");
+                    ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"stories-token\"]");
+                    Random rng = new Random();
 
-                while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null) {
+                    while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null) {
+                        ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
+
+                        rng.Shuffle<ElementHandle>(tokens);
                         foreach (ElementHandle element in tokens) {
+                            foreach (ElementHandle disabledToken in disabledTokens) {
+                                int index = Array.IndexOf(tokens, disabledToken);
+                                tokens.Where(val => val != disabledToken).ToArray();
+                            }
                             await element.ClickAsync();
                         }
                     }
