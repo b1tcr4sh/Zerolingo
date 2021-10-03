@@ -71,7 +71,7 @@ namespace Zerolingo
 
                 ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX", new WaitForSelectorOptions {Timeout = 0});
                 JSHandle titleText = await title.GetPropertyAsync("textContent");   
-                Console.WriteLine("Beginning grinding on \"{0}\"", await titleText.JsonValueAsync());
+                Console.WriteLine("\nBeginning grinding on \"{0}\"", await titleText.JsonValueAsync());
 
                 ElementHandle startButton = await storiesPage.WaitForSelectorAsync("[data-test=\"story-start\"]");
                 await startButton.ClickAsync();
@@ -79,14 +79,15 @@ namespace Zerolingo
 
                 // Story has been entered/started
                 await CompleteStory(storiesPage);
-                await storiesPage.WaitForNavigationAsync();
-                // await ExitStory(storiesPage);
+                await ExitStory(storiesPage);
             }
         }
         static async Task CompleteStory(Page storiesPage) {
-            ElementHandle continueButton = await storiesPage.WaitForSelectorAsync("[data-test=\"stories-player-continue\"]");
+            ElementHandle button = await storiesPage.WaitForSelectorAsync("[data-test=\"stories-player-continue\"]");
+            int attempts = 0;
 
             while (storiesPage.QuerySelectorAsync("[data-test=\"stories-player-continue\"]") != null) {
+                ElementHandle continueButton = await storiesPage.WaitForSelectorAsync("[data-test=\"stories-player-continue\"]");
                 await continueButton.ClickAsync();
 
                 if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-choice\"]") != null) {
@@ -105,29 +106,34 @@ namespace Zerolingo
                     ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"stories-token\"]");
                     Random rng = new Random();
 
-                    int attempts = 0;
                     ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
-                    while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null && disabledTokens.Length != 0) {
-                        disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
+                    while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
+                        
                         rng.Shuffle<ElementHandle>(tokens);
                         foreach (ElementHandle element in tokens) {
+                            disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
                             foreach (ElementHandle disabledToken in disabledTokens) {
                                 int index = Array.IndexOf(tokens, disabledToken);
                                 tokens.Where(val => val != disabledToken).ToArray();
                             }
                             await element.ClickAsync();
                             Console.Write("\rTook {0} attempt(s) to complete matching tokens.", attempts);   
-                            attempts++;
+                            attempts++;                            
                         }
                     }
+                    return;
                 }
             }            
         }
         static async Task ExitStory(Page page) {
-            while (page.QuerySelectorAsync("[data-test=\"stories-player-done\"]") != null) {
-                ElementHandle continueButton = await page.QuerySelectorAsync("[data-test=\"stories-player-done\"]");
-                await continueButton.ClickAsync();
+            while (await page.QuerySelectorAsync("[data-test=\"stories-player-done\"]") == null) {
+                await page.ClickAsync("[data-test=\"stories-player-continue\"]");
             }
+
+
+            ElementHandle completeButton = await page.WaitForSelectorAsync("[data-test=\"stories-player-done\"]");
+            await page.ClickAsync("[data-test=\"stories-player-done\"]");
+
             await page.WaitForSelectorAsync("div._3wEt9");
         }
     }
