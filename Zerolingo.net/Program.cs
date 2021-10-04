@@ -17,9 +17,7 @@ namespace Zerolingo
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
-#if DEBUG
                 Headless = false,
-#endif
                 Timeout = 0
             });
 
