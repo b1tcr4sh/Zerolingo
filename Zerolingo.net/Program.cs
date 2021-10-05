@@ -13,6 +13,7 @@ namespace Zerolingo
 
         static async Task Main(string[] args)
         {
+            ErrorHandler errorHandler = new ErrorHandler();
             await DownloadController.DownloadDefaultAsync();
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
@@ -27,6 +28,9 @@ namespace Zerolingo
 
             var page = await browser.NewPageAsync();
             page.DefaultTimeout = 100000;
+
+            errorHandler.RegisterEvents(browser, page);
+
 
             Console.WriteLine("Navigating To https://duolingo.com...  Depending on your connection, this may take a moment");
             await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
