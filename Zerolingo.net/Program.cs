@@ -10,10 +10,10 @@ namespace Zerolingo
     class Program
     {
         public static Browser browser;
-
+        private static ErrorHandler errorHandler;
         static async Task Main(string[] args)
         {
-            ErrorHandler errorHandler = new ErrorHandler();
+            errorHandler = new ErrorHandler();
             await DownloadController.DownloadDefaultAsync();
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
@@ -32,8 +32,7 @@ namespace Zerolingo
             errorHandler.RegisterEvents(browser, page);
 
 
-            Console.WriteLine("Navigating To https://duolingo.com...  Depending on your connection, this may take a moment");
-            await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
+            await errorHandler.GoToAsyncExceptionSafe(page, "https://duolingo.com/");
 
             await login(page);
         }
@@ -71,7 +70,7 @@ namespace Zerolingo
             // Navigate to stories page and begin story grinding
 
             while (true) {
-                await storiesPage.GoToAsync("https://www.duolingo.com/stories/es-en-una-cita?mode=read", new NavigationOptions {Timeout = 0});
+                await errorHandler.GoToAsyncExceptionSafe(storiesPage, "https://duolingo.com/stories/en-es-una-cita");
 
                 ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX", new WaitForSelectorOptions {Timeout = 0});
                 JSHandle titleText = await title.GetPropertyAsync("textContent");   
