@@ -42,7 +42,7 @@ namespace Zerolingo {
             await pageMember.DisposeAsync();
         }
         public async void ConnectionError(object sender, RequestEventArgs e) {
-            // Console.WriteLine("A request sent by the page failed to connect: {0}: {1}", e.Request.Response.Status, e.Request.Response.StatusText);
+            Console.WriteLine("A request sent by the page failed to connect");
 
             await pageMember.DisposeAsync();
         }
