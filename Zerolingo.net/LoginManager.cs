@@ -64,12 +64,21 @@ namespace Zerolingo
             await googlePopup.TypeAsync("[type=\"email\"]", googleCredentials.Username);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
 
+            if (await googlePopup.QuerySelectorAsync("[aria-invalid=\"true\"]") != null) {
+                Console.WriteLine("Incorrect Email entered, please try again once the page reloads.");
+            }
+
             // TODO: Handle incorrect email/password
 
             Thread.Sleep(4000);
             await googlePopup.WaitForSelectorAsync("[type=\"password\"]");
             await googlePopup.TypeAsync("[type=\"password\"]", googleCredentials.Password);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");
+
+            if (await googlePopup.QuerySelectorAsync("[aria-invalid=\"true\"]") != null) {
+                Console.WriteLine("Incorrect Password entered, please try again once the page reloads.");
+            }
+
 
         }
     }
