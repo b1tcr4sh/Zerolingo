@@ -32,6 +32,10 @@ namespace Zerolingo
             await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
 
             await login(page);
+
+
+            // Task<int> returnTask = new Task<int>(() => {return 0});
+            // return returnTask;
         }
         public static async Task login(Page page)
         {
@@ -69,10 +73,12 @@ namespace Zerolingo
         
         static async Task StoryGrind(Page storiesPage, Page pageToClose, String[] storyList)
         {
-            await pageToClose.CloseAsync();
+            // await pageToClose.CloseAsync();
             // Navigate to stories page and begin story grinding
 
-            foreach (String url in storyList) {
+            Console.WriteLine(string.Join(", ", storyList));
+
+            foreach (string url in storyList) {
 
                 string processedURL = ProcessURL(url);
 
@@ -148,7 +154,7 @@ namespace Zerolingo
         static async Task<String[]> GetStoryList() {
             String[] storyUrls = {};
             Page page = await browser.NewPageAsync();
-            await page.GoToAsync("https://www.duolingo.com/stories");
+            await page.GoToAsync("https://www.duolingo.com/stories", new NavigationOptions {Timeout = 0});
 
             ElementHandle[] storyIcons = await page.QuerySelectorAllAsync("div.X4jDx");
 
@@ -157,12 +163,13 @@ namespace Zerolingo
                 await element.ClickAsync();
                 ElementHandle startButton = await page.QuerySelectorAsync("[data-test=\"story-start-button\"]");
                 JSHandle buttonHref = await startButton.GetPropertyAsync("href");
+                object hrefJSON = await buttonHref.JsonValueAsync();
 
-                storyUrls.Append<String>(buttonHref.JsonValueAsync().ToString());
-                Console.Write("Appended {0} to list of stories.", await buttonHref.JsonValueAsync());
+                storyUrls.Append<String>(hrefJSON.ToString());
+                Console.WriteLine("Appended {0} to list of stories.", await buttonHref.JsonValueAsync());
             }
 
-            await page.CloseAsync();
+            // await page.CloseAsync();
             return storyUrls;
         }
         static String ProcessURL(String url) {
