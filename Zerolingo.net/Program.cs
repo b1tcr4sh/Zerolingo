@@ -53,24 +53,30 @@ namespace Zerolingo
                 await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
                 await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv._2d3xe"); // "Learn" Button: To wait for login to complete before attempting to navigate to story.
 
-                String[] storyList = await GetStoryList(page);
+                String[] storyList = await GetStoryList();
 
 
                 Page storiesPage = await browser.NewPageAsync();
-                await StoryGrind(storiesPage, page);
+                await StoryGrind(storiesPage, page, storyList);
             } else {
+                String[] storyList = await GetStoryList();
+
+
                 Page storiesPage = await browser.NewPageAsync();
-                await StoryGrind(storiesPage, page);
+                await StoryGrind(storiesPage, page, storyList);
             }
         }
         
-        static async Task StoryGrind(Page storiesPage, Page pageToClose)
+        static async Task StoryGrind(Page storiesPage, Page pageToClose, String[] storyList)
         {
             await pageToClose.CloseAsync();
             // Navigate to stories page and begin story grinding
 
-            while (true) {
-                await storiesPage.GoToAsync("https://www.duolingo.com/stories/es-en-una-cita?mode=read", new NavigationOptions {Timeout = 0});
+            foreach (String url in storyList) {
+
+                string processedURL = ProcessURL(url);
+
+                await storiesPage.GoToAsync(processedURL, new NavigationOptions {Timeout = 0});
 
                 ElementHandle title = await storiesPage.WaitForSelectorAsync("div.saQLX", new WaitForSelectorOptions {Timeout = 0});
                 JSHandle titleText = await title.GetPropertyAsync("textContent");   
@@ -139,8 +145,11 @@ namespace Zerolingo
 
             await page.WaitForSelectorAsync("div._3wEt9");
         }
-        static async Task<String[]> GetStoryList(Page page) {
+        static async Task<String[]> GetStoryList() {
             String[] storyUrls = {};
+            Page page = await browser.NewPageAsync();
+            await page.GoToAsync("https://www.duolingo.com/stories");
+
             ElementHandle[] storyIcons = await page.QuerySelectorAllAsync("div.X4jDx");
 
 
@@ -153,7 +162,18 @@ namespace Zerolingo
                 Console.Write("Appended {0} to list of stories.", await buttonHref.JsonValueAsync());
             }
 
+            await page.CloseAsync();
             return storyUrls;
+        }
+        static String ProcessURL(String url) {
+            if (url.Contains("listen") == true) {
+                // Remove "listen" from the end of the string, and replace with "read"
+                string trimmedUrl = url.Remove(url.Length - 6);
+                string joinedUrl = trimmedUrl + "read";
+
+                return joinedUrl;
+            }
+            return url;
         }
     }
 }
