@@ -3,6 +3,7 @@ using PuppeteerSharp;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
+using System.Collections.Generic;
 using Zerolingo;
 
 namespace Zerolingo
@@ -57,26 +58,25 @@ namespace Zerolingo
                 await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
                 await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv._2d3xe"); // "Learn" Button: To wait for login to complete before attempting to navigate to story.
 
-                String[] storyList = await GetStoryList();
+                IEnumerable<String> storyList = await GetStoryList();
 
-
+                Thread.Sleep(5000);
                 Page storiesPage = await browser.NewPageAsync();
                 await StoryGrind(storiesPage, page, storyList);
             } else {
-                String[] storyList = await GetStoryList();
+                IEnumerable<String> storyList = await GetStoryList();
 
-
+                Thread.Sleep(5000);
                 Page storiesPage = await browser.NewPageAsync();
                 await StoryGrind(storiesPage, page, storyList);
             }
         }
         
-        static async Task StoryGrind(Page storiesPage, Page pageToClose, String[] storyList)
+        static async Task StoryGrind(Page storiesPage, Page pageToClose, IEnumerable<String> storyList)
         {
             // await pageToClose.CloseAsync();
             // Navigate to stories page and begin story grinding
 
-            Console.WriteLine(string.Join(", ", storyList));
 
             foreach (string url in storyList) {
 
@@ -96,6 +96,7 @@ namespace Zerolingo
                 await CompleteStory(storiesPage);
                 await ExitStory(storiesPage);
             }
+            Console.ReadKey();
         }
         static async Task CompleteStory(Page storiesPage) {
             ElementHandle button = await storiesPage.WaitForSelectorAsync("[data-test=\"stories-player-continue\"]");
@@ -151,8 +152,8 @@ namespace Zerolingo
 
             await page.WaitForSelectorAsync("div._3wEt9");
         }
-        static async Task<String[]> GetStoryList() {
-            String[] storyUrls = {};
+        static async Task<IEnumerable<String>> GetStoryList() {
+            IEnumerable<String> storyUrls = new string[] {};
             Page page = await browser.NewPageAsync();
             await page.GoToAsync("https://www.duolingo.com/stories", new NavigationOptions {Timeout = 0});
 
@@ -165,7 +166,7 @@ namespace Zerolingo
                 JSHandle buttonHref = await startButton.GetPropertyAsync("href");
                 object hrefJSON = await buttonHref.JsonValueAsync();
 
-                storyUrls.Append<String>(hrefJSON.ToString());
+                storyUrls = storyUrls.Append<String>(hrefJSON.ToString());
                 Console.WriteLine("Appended {0} to list of stories.", await buttonHref.JsonValueAsync());
             }
 
