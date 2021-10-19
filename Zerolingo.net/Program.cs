@@ -156,6 +156,7 @@ namespace Zerolingo
             IEnumerable<String> storyUrls = new string[] {};
             Page page = await browser.NewPageAsync();
             await page.GoToAsync("https://www.duolingo.com/stories", new NavigationOptions {Timeout = 0});
+            Thread.Sleep(TimeSpan.FromSeconds(2));
 
             ElementHandle[] storyIcons = await page.QuerySelectorAllAsync("div.X4jDx");
 
