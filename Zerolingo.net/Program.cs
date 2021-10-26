@@ -164,11 +164,15 @@ namespace Zerolingo
             foreach (ElementHandle element in storyIcons) {
                 await element.ClickAsync();
                 ElementHandle startButton = await page.QuerySelectorAsync("[data-test=\"story-start-button\"]");
-                JSHandle buttonHref = await startButton.GetPropertyAsync("href");
-                object hrefJSON = await buttonHref.JsonValueAsync();
+                if (startButton != null) {
+                        JSHandle buttonHref = await startButton.GetPropertyAsync("href");
+                    object hrefJSON = await buttonHref.JsonValueAsync();
 
-                storyUrls = storyUrls.Append<String>(hrefJSON.ToString());
-                Console.WriteLine("Appended {0} to list of stories.", await buttonHref.JsonValueAsync());
+                    storyUrls = storyUrls.Append<String>(hrefJSON.ToString());
+                    Console.WriteLine("Appended {0} to list of stories.", await buttonHref.JsonValueAsync());
+                } else {
+                    Console.WriteLine("Skipped a story because it was locked.");
+                }
             }
 
             // await page.CloseAsync();
