@@ -25,15 +25,21 @@ If on Windows, when the program runs, [occasionally it may pause execution due t
 
 ### Linux
 Download the latest [release](https://github.com/vividuwu/zerolingo/releases) for Linux and unzip the file.  This can be done with the "unzip" utility with the following command:
-```$ unzip Zerolingo-X.X.X-LinX64.zip```
+```bash
+$ unzip Zerolingo-X.X.X-LinX64.zip
+```
 Once this is done, open up the directory and find the 'Zerolingo' executable.  Make sure that it is flagged as executable with the following command:
-```$ chmod +x ./Zerolingo```
+```
+$ chmod +x ./Zerolingo
+```
 After this, just run it, either by double clicking in a UI (Ie. Dolphin) or running
-```$ ./Zerolingo```
-It should either start in the terminal you opened it or create a new window and being downloading Chromium, just follow the on screen instructions in the console and spend your newly acquired freetime elsewhere!
+```
+$ ./Zerolingo
+```
+It should either start in the terminal you opened it or create a new window and begin downloading Chromium, just follow the on screen instructions in the console and spend your newly acquired freetime elsewhere!
 
 ## Exiting the Program
-There is no built-in way to exit the program while it is running, so to do so, you will need to first issue an interupt signal to the terminal/command line where it is running by click CTRL+C (Maybe a few times) this should terminate the process.  If the Chromium window is still open after this, just manually close it like you would any other window.
+There is no built-in way to exit the program while it is running, so to do so, you will need to first issue an interupt signal to the terminal/command line where it is running by entering CTRL+C (Maybe a few times) this should terminate the process.  If the Chromium window is still open after this, just manually close it like you would any other window.
 
 
 ## Features
