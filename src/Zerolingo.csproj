@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <ApplicationIcon>./Assets/Zerolingo.ico</ApplicationIcon>
     <VersionPrefix>1.12.11</VersionPrefix>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
