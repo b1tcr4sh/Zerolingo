@@ -35,20 +35,17 @@ namespace Zerolingo
             await page.TypeAsync("[data-test=\"password-input\"]", credentials.Password);
 
             await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
-            /*  Attempt at checking for incorrect passwords
-            if (await page.WaitForSelectorAsync("div._1G8OV._14ezr") != null) {
+            // Attempt at checking for incorrect passwords
+            if (await page.QuerySelectorAsync("[data-test=\"invalid-form-field\"]") != null) {
                 Console.WriteLine("Incorrect Username or Password Entered. Please try again once the page reloads...");
                 
                 await page.ReloadAsync(new NavigationOptions {Timeout = 0});
-                // await Program.login(page);
+                await Program.login(page);
             
-                await page.WaitForSelectorAsync("[data-test=have-account]");
-                await page.ClickAsync("div._3uMJF");
-                await LoginToDuolingo(page);
-            } else {
-                Console.WriteLine("Successfully Logged in!");
-            } */
-
+                // await page.WaitForSelectorAsync("[data-test=have-account]");
+                // await page.ClickAsync("div._3uMJF");
+                // await LoginToDuolingo(page);
+            }
         }
         public async void LoginWithGoogle(object sender, PopupEventArgs e)
         {

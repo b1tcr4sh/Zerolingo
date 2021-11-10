@@ -50,12 +50,14 @@ namespace Zerolingo
             Console.WriteLine("Loading Complete!  Please enter your Duolingo login credentials:");
             await passwordManager.LoginToDuolingo(page);
 
-            // Check for "Continue with Google" button
+            // Check for "Continue with Google" button1
 
-
-            if (await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
+            Thread.Sleep(5000);
+            if (await page.QuerySelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF") != null) {
                 
+                // await page.WaitForSelectorAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
                 await page.ClickAsync("button._3HhhB._2NolF._275sd._1ZefG._2Dar-._2zhZF");
+                // _3HhhB _2NolF _275sd _1ZefG _2Dar- _2zhZF
                 await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv._2d3xe"); // "Learn" Button: To wait for login to complete before attempting to navigate to story.
 
                 IEnumerable<String> storyList = await GetStoryList();
@@ -64,6 +66,8 @@ namespace Zerolingo
                 Page storiesPage = await browser.NewPageAsync();
                 await StoryGrind(storiesPage, page, storyList);
             } else {
+                await page.WaitForSelectorAsync("div._3E4oM._3jIW4._3iLdv._2d3xe"); // "Learn" Button: To wait for login to complete before attempting to navigate to story.
+
                 IEnumerable<String> storyList = await GetStoryList();
 
                 Thread.Sleep(5000);
