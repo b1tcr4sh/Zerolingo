@@ -1,4 +1,4 @@
-<img src="https://github.com/vividuwu/Zerolingo/blob/master/Assets/ZerolingoLogoText.png">
+<img src="https://github.com/vividuwu/Zerolingo/blob/master/src/Assets/ZerolingoLogoText.png">
 <hr>
 
 # Zerolingo 
