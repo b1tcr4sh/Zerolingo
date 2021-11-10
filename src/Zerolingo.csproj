@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <ApplicationIcon>./Assets/ZerolingoLogo.ico</ApplicationIcon>
-    <VersionPrefix>1.12.11</VersionPrefix>
+    <VersionPrefix>1.13.12</VersionPrefix>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
