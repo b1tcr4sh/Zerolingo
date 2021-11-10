@@ -1,4 +1,4 @@
-# Zerolingo
+# Zerolingo <img src="https://github.com/vividuwu/Zerolingo/blob/master/Assets/ZerolingoLogo.png">
 
 ### Scripts for farming xp on Duolingo spanish by spamming stories.
 > *What do you mean "This isn't doing your homework"?*
