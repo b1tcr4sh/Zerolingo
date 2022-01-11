@@ -10,21 +10,25 @@ namespace Zerolingo
 {
     class Program
     {
+        public static string[] _args { get; private set; }
         public static Browser browser;
 
         static async Task Main(string[] args)
         {
+            _args = args;
+
             await DownloadController.DownloadDefaultAsync();
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
 // #if DEBUG
-                Headless = false,
+                Headless = true,
 // #endif
                 Timeout = 0
             });
 
             Console.WriteLine($"Downloaded version {await browser.GetVersionAsync()}");
+
 
             var page = await browser.NewPageAsync();
             page.DefaultTimeout = 100000;
@@ -40,7 +44,7 @@ namespace Zerolingo
         }
         public static async Task login(Page page)
         {
-            LoginManager passwordManager = new LoginManager();
+            LoginManager passwordManager = new LoginManager(_args);
             page.Popup += new EventHandler<PopupEventArgs>(passwordManager.LoginWithGoogle); 
 
 
