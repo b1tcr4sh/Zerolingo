@@ -12,17 +12,23 @@ namespace Zerolingo
     {
         public static string[] _args { get; private set; }
         public static Browser browser;
+        public const string ProjectVersion = "1.14.12";
 
-        static async Task Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
             _args = args;
+
+            if (args.Length != 2) {
+                PrintHelpMessage();
+                return 0;
+            }
 
             await DownloadController.DownloadDefaultAsync();
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
 // #if DEBUG
-                Headless = true,
+                Headless = false,
 // #endif
                 Timeout = 0
             });
@@ -37,8 +43,7 @@ namespace Zerolingo
             await page.GoToAsync("https://duolingo.com", new NavigationOptions {Timeout = 0});
 
             await login(page);
-
-
+            return 0;
             // Task<int> returnTask = new Task<int>(() => {return 0});
             // return returnTask;
         }
@@ -195,6 +200,11 @@ namespace Zerolingo
                 return joinedUrl;
             }
             return url;
+        }
+        public static void PrintHelpMessage() { 
+            Console.WriteLine($"Zerolingo v{ProjectVersion}");
+            Console.WriteLine("Standard Usage: zerolingo [duolingo-account-username/email] [duolingo-account-password]");      
+            Console.WriteLine("Prodecing as normal");      
         }
     }
 }
