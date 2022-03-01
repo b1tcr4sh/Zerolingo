@@ -117,31 +117,36 @@ namespace Zerolingo
                         await element.ClickAsync();
                     } 
                 } else if (await storiesPage.QuerySelectorAsync("[data-test=\"challenge-tap-token\"]") != null) {
-                    ElementHandle[] choices = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
+                    // ElementHandle[] choices = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
 
-                    foreach (ElementHandle element in choices) {
-                        await element.ClickAsync();
-                    } 
-                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-token\"]") != null) {
-                    ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"stories-token\"]");
+                    // foreach (ElementHandle element in choices) {
+                    //     await element.ClickAsync();
+                    // } 
+
+                    ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
                     Random rng = new Random();
 
-                    ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
-                    while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
-                        
+                    ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[aria-disabled=\"true\"]");
+                    // while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
+                    while (tokens.Length >= 1) { 
                         rng.Shuffle<ElementHandle>(tokens);
                         foreach (ElementHandle element in tokens) {
-                            disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
+                            disabledTokens = await storiesPage.QuerySelectorAllAsync("[aria-disabled=\"true\"]");
                             foreach (ElementHandle disabledToken in disabledTokens) {
                                 int index = Array.IndexOf(tokens, disabledToken);
                                 tokens.Where(val => val != disabledToken).ToArray();
                             }
                             await element.ClickAsync();
                             Console.Write("\rTook {0} attempt(s) to complete matching tokens.", attempts);   
-                            attempts++;                            
+                            attempts++;
+
+                            if (tokens.Length == disabledTokens.Length) break;                     
                         }
                     }
-                    return;
+                    // break;
+
+                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-token\"]") != null) {
+                    
                 }
             }            
         }
