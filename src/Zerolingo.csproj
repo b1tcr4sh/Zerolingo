@@ -4,7 +4,7 @@
     <ApplicationIcon>./Assets/ZerolingoLogo.ico</ApplicationIcon>
     <VersionPrefix>1.13.12</VersionPrefix>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
