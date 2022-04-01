@@ -1,9 +1,3 @@
-# Due to breaking website changes, Zerolingo is currently broken.  I'm working on rewritring the functionality into a [seperate library](https://github.com/vividuwu/duolingo-api) using Playwright in place of PuppeteerSharp in hopes of fixing some issues I had using PuppeteerSharp.  Once this is useable, Zerolingo will be rewritten as well to use this new library as a dependency, and should fix the breaking website updates.
-> Stay posted for a new release soon!
-
-
-
-
 <img src="https://github.com/vividuwu/Zerolingo/blob/master/src/Assets/ZerolingoLogoText.png">
 <hr>
 
