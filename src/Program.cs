@@ -92,6 +92,7 @@ namespace Zerolingo
                 JSHandle titleText = await title.GetPropertyAsync("textContent");   
                 Console.WriteLine("\nBeginning grinding on \"{0}\"", await titleText.JsonValueAsync());
 
+                // await storiesPage.WaitForNavigationAsync();
                 ElementHandle startButton = await storiesPage.WaitForSelectorAsync("[data-test=\"story-start\"]");
                 await startButton.ClickAsync();
 
@@ -119,30 +120,32 @@ namespace Zerolingo
                 } else if (await storiesPage.QuerySelectorAsync("[data-test=\"challenge-tap-token\"]") != null) {
                     ElementHandle[] choices = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
 
-                    foreach (ElementHandle element in choices) {
-                        await element.ClickAsync();
-                    } 
-                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-token\"]") != null) {
-                    ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"stories-token\"]");
-                    Random rng = new Random();
-
-                    ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
-                    while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
-                        
-                        rng.Shuffle<ElementHandle>(tokens);
-                        foreach (ElementHandle element in tokens) {
-                            disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
-                            foreach (ElementHandle disabledToken in disabledTokens) {
-                                int index = Array.IndexOf(tokens, disabledToken);
-                                tokens.Where(val => val != disabledToken).ToArray();
-                            }
+                    if (choices.Length < 5) {
+                        foreach (ElementHandle element in choices) {
                             await element.ClickAsync();
-                            Console.Write("\rTook {0} attempt(s) to complete matching tokens.", attempts);   
-                            attempts++;                            
+                        } 
+                    } else {
+                        ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
+                        Random rng = new Random();
+
+                        ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[aria-disabled=\"true\"]");
+                        while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
+                            
+                            rng.Shuffle<ElementHandle>(tokens);
+                            foreach (ElementHandle element in tokens) {
+                                disabledTokens = await storiesPage.QuerySelectorAllAsync("[aria-disabled=\"true\"]");
+                                foreach (ElementHandle disabledToken in disabledTokens) {
+                                    int index = Array.IndexOf(tokens, disabledToken);
+                                    tokens.Where(val => val != disabledToken).ToArray();
+                                }
+                                await element.ClickAsync();
+                                Console.Write("\rTook {0} attempt(s) to complete matching tokens.", attempts);   
+                                attempts++;                            
+                            }
                         }
+                        return;
                     }
-                    return;
-                }
+                } 
             }            
         }
         static async Task ExitStory(Page page) {
