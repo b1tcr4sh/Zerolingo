@@ -149,13 +149,13 @@ namespace Zerolingo
             }            
         }
         static async Task ExitStory(Page page) {
-            while (await page.QuerySelectorAsync("[data-test=\"stories-player-done\"]") == null) {
-                await page.ClickAsync("[data-test=\"stories-player-continue\"]");
+            while (await page.QuerySelectorAsync("[data-test=\"stories-player-continue\"]") != null) {
+                try {
+                    await (await page.QuerySelectorAsync("[data-test=\"stories-player-continue\"]")).ClickAsync();
+                } finally {
+                    await page.ClickAsync("[data-test=\"stories-player-done\"]");
+                }
             }
-
-
-            ElementHandle completeButton = await page.WaitForSelectorAsync("[data-test=\"stories-player-done\"]");
-            await page.ClickAsync("[data-test=\"stories-player-done\"]");
 
             await page.WaitForSelectorAsync("div._3wEt9");
         }
