@@ -4,11 +4,11 @@
     <ApplicationIcon>./Assets/ZerolingoLogo.ico</ApplicationIcon>
     <VersionPrefix>1.13.12</VersionPrefix>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PuppeteerSharp" Version="5.0.0" />
+    <PackageReference Include="PuppeteerSharp" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
