@@ -116,32 +116,39 @@ namespace Zerolingo
                     foreach (ElementHandle element in choices) {
                         await element.ClickAsync();
                     } 
-                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"challenge-tap-token\"]") != null) {
+                } else if (await storiesPage.QuerySelectorAsync("[data-test=\"challenge-tap-token\"]") is not null) {
                     ElementHandle[] choices = await storiesPage.QuerySelectorAllAsync("[data-test=\"challenge-tap-token\"]");
 
-                    foreach (ElementHandle element in choices) {
-                        await element.ClickAsync();
-                    } 
+                    if (choices.Length > 3) {
+                        Random rng = new Random();
+
+                        ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
+                        while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
+                            
+                            rng.Shuffle<ElementHandle>(choices);
+                            foreach (ElementHandle element in choices) {
+                                disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
+                                foreach (ElementHandle disabledToken in disabledTokens) {
+                                    int index = Array.IndexOf(choices, disabledToken);
+                                    choices.Where(val => val != disabledToken).ToArray();
+                                }
+                                await element.ClickAsync();
+                                Console.Write("\rTook {0} attempt(s) to complete matching tokens.", attempts);   
+                                attempts++;                            
+                            }
+                        }
+                    } else {
+                            foreach (ElementHandle element in choices) {
+                            await element.ClickAsync();
+                        } 
+                    }
+                    
                 } else if (await storiesPage.QuerySelectorAsync("[data-test=\"stories-token\"]") != null) {
                     ElementHandle[] tokens = await storiesPage.QuerySelectorAllAsync("[data-test=\"stories-token\"]");
-                    Random rng = new Random();
-
-                    ElementHandle[] disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
-                    while (await storiesPage.QuerySelectorAsync("span._3Y29z._176_d._2jNpf") == null || await storiesPage.QuerySelectorAsync("h2._1qFda") != null) {
-                        
-                        rng.Shuffle<ElementHandle>(tokens);
-                        foreach (ElementHandle element in tokens) {
-                            disabledTokens = await storiesPage.QuerySelectorAllAsync("[disabled=\"\"");
-                            foreach (ElementHandle disabledToken in disabledTokens) {
-                                int index = Array.IndexOf(tokens, disabledToken);
-                                tokens.Where(val => val != disabledToken).ToArray();
-                            }
-                            await element.ClickAsync();
-                            Console.Write("\rTook {0} attempt(s) to complete matching tokens.", attempts);   
-                            attempts++;                            
-                        }
+                    
+                    foreach (ElementHandle element in tokens) {
+                        await element.ClickAsync();
                     }
-                    return;
                 }
             }            
         }
