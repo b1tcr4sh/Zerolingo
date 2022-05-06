@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 using System.Threading;
 using PuppeteerSharp;
 using Zerolingo;
+using Zerolingo.Credentials;
 
 namespace Zerolingo
 {
-    class LoginManager
+    public class LoginManager
     {
+        private LoginCredentials duolingoCredentials;
+        private LoginCredentials googleCredentials;
+
+        public LoginManager(LoginCredentials duolingo, LoginCredentials google) {
+            duolingoCredentials = duolingo;
+            googleCredentials = google;
+        }
+        public LoginManager() {
+            duolingoCredentials = CollectCredentials("Duolingo");
+            googleCredentials = CollectCredentials("Google");
+        }
+
         public LoginCredentials CollectCredentials(string service)
         {
             LoginCredentials credentials = new LoginCredentials();  
@@ -25,14 +38,12 @@ namespace Zerolingo
             return credentials;
         }
         public async Task LoginToDuolingo(Page page) {
-            LoginCredentials credentials = CollectCredentials("Duolingo");
-
             Console.WriteLine("Attempting to Log In...");
             await page.WaitForSelectorAsync("input._3MNft.fs-exclude");
 
 
-            await page.TypeAsync("[data-test=\"email-input\"]", credentials.Username);
-            await page.TypeAsync("[data-test=\"password-input\"]", credentials.Password);
+            await page.TypeAsync("[data-test=\"email-input\"]", duolingoCredentials.Username);
+            await page.TypeAsync("[data-test=\"password-input\"]", duolingoCredentials.Password);
 
             await page.ClickAsync("button._1rl91._3HhhB._2NolF._275sd._1ZefG._2oW4v");
             // Attempt at checking for incorrect passwords
@@ -50,13 +61,11 @@ namespace Zerolingo
         public async void LoginWithGoogle(object sender, PopupEventArgs e)
         {
             Console.WriteLine("\"Continue With Google\" Popup appeared");
-            LoginManager passwordManager = new LoginManager();
 
             Page googlePopup = e.PopupPage;
             await googlePopup.WaitForSelectorAsync("input.whsOnd.zHQkBf");
 
             Console.WriteLine("Your account was created with Google, so please enter your Google credentials:");
-            LoginCredentials googleCredentials = passwordManager.CollectCredentials("Google");
 
             await googlePopup.TypeAsync("[type=\"email\"]", googleCredentials.Username);
             await googlePopup.ClickAsync("button.VfPpkd-LgbsSe.VfPpkd-LgbsSe-OWXEXe-k8QpJ.VfPpkd-LgbsSe-OWXEXe-dgl2Hf.nCP5yc.AjY5Oe.DuMIQc.qIypjc.TrZEUc.lw1w4b");

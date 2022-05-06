@@ -5,15 +5,23 @@ using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 using Zerolingo;
+using Zerolingo.Credentials;
 
 namespace Zerolingo
 {
     class Program
     {
+        private static CredentialManager credentialManager;
+        private static string[] Args;
         public static Browser browser;
 
         static async Task Main(string[] args)
         {
+            Args = args;
+            credentialManager = new CredentialManager("./credentials.json");
+            await credentialManager.InitializeCredentialFile();
+
+
             await DownloadController.DownloadDefaultAsync();
 
             browser = await Puppeteer.LaunchAsync(new LaunchOptions
@@ -40,7 +48,12 @@ namespace Zerolingo
         }
         public static async Task login(Page page)
         {
-            LoginManager passwordManager = new LoginManager();
+            LoginManager passwordManager;
+            if (Args.Contains("-l")) 
+                passwordManager = new LoginManager(credentialManager.duolingoCredentials, credentialManager.googleCredentials);
+            else 
+                passwordManager = new LoginManager();
+
             page.Popup += new EventHandler<PopupEventArgs>(passwordManager.LoginWithGoogle); 
 
 
