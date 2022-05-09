@@ -1,14 +1,17 @@
-<img src="https://github.com/vividuwu/Zerolingo/blob/master/src/Assets/ZerolingoLogoText.png">
-<hr>
+<div align="center">
+  <img src="https://github.com/vividuwu/Zerolingo/blob/master/src/Assets/ZerolingoLogoText.png">
+  <h1>Zerolingo</h1> 
+  <p>Scripts for farming xp on Duolingo spanish by spamming stories.</p>
+</div>
 
-# Zerolingo 
+<br>
+<br>
 
-### Scripts for farming xp on Duolingo spanish by spamming stories.
 > *What do you mean "This isn't doing your homework"?*
 
 #### This is a mini-project with a cringetastic name that I'm doing to help me practice my C# skills, learn more about web protocol, and learn how to use puppeteer *and definitely not to do my homwework for me or anything.*
 
-Essentially, this app is suuper simple.  It logs into to Duolingo with your provided login, collects a list of all of the available story lessons, then just loops through the list and autocompletes them.  Although the efficiency varies, it can farm about **1200 XP per hour**, depending on how long it takes to complete each lesson.
+Essentially, this app is suuper simple.  It logs into Duolingo with your provided login, collects a list of all of the available story lessons, then just loops through the list and autocompletes them.  Although the efficiency varies, it can farm about **1200 XP per hour**, depending on how long it takes to complete each lesson.
 
 This app uses [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) and is written in C#.  The provided [releases](https://vividuwu/zerolingo/releases) are built to be *self contained* meaning that they bundle the .NET runtime and libraries needed to run the app, in the event that the user doesn't have .NET installed.  This does cause a slightly larger download, but the overall size is only ~30Mb, which is pretty manageable. 
 > This app uses the [Puppeteersharp](https://github.com/hardkoded/puppeteer-sharp) API to communicate with the Chromium instance via [Chrome Dev Tools](https://developer.chrome.com/docs/devtools/).
